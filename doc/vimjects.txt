@@ -1,0 +1,14 @@
+*vimjects.txt*  Project specific vim configurations
+
+Types of files
+
+.vimjectsrc  - Opened with 
+
+.vimjectsbufrc - You can source buffer-specific se
+
+.vimjectswinrc - Opened with each
+
+Variables
+
+g:vimjects_secure_mode
+
