@@ -15,7 +15,7 @@ Vimjects is compatible with Pathogen and other Vim addon managers. I personally 
 
 Just add
 
-    Plug 'ahalbert/vim-misc'
+    Plug 'ahalbert/vimjects'
 
 between the Plug calls in your .vimrc.
 
