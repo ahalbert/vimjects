@@ -2,12 +2,12 @@
 
 Project specific vim configurations for hackers. Checks your project's directory for `.vimjectsrc` files and sources them.
 
-For example, you can add autocommands that automatically runs your projects build command on save, specific to each project.
+For example, you can add autocommands that automatically runs your project's build command on save, specific to each project.
 
 ###Features: 
-* Recursivley searches the filesystem for .vimjectrc and .vimjectrcbuf files and sources them
-* Rudimetery security features
-* Completley customizable to your needs
+* Recursively searches the filesystem for .vimjectrc and .vimjectrcbuf files and sources them
+* Rudimentary security features
+* Completely customizable to your needs
 
 ##Installation
 
@@ -20,7 +20,7 @@ Just add
 between the Plug calls in your .vimrc.
 
 ##Using Vimjects
-Add a .vimjectrc file with the extra configuraiton options in the directoty of your project.
+Add a .vimjectrc file with the extra configuration options in the directory of your project.
 
 Vimjects will confirm you want to source this file before doing so.
 
@@ -39,7 +39,7 @@ Default: `0`
 #### `g:Vimjects_secure`
 Values: `1` or `0`
 
-If set to `1`, ask for confirmation is file has never been loaded or been changed since last loaded. If set to `0`, file is sourced without prompting
+If set to `1`, ask for confirmation if file has never been loaded or been changed since last loaded. If set to `0`, file is sourced without prompting
 
 The hashes check if the file has changed since previous
 
