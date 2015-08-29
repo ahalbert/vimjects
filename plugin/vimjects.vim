@@ -1,21 +1,30 @@
 augroup VimjectsAutogroup
-    au BufNewFile,BufRead .vimjectrc* setlocal ft=vim
-    autocmd VimEnter call vimjects#source("")
-    autocmd BufReadPre call vimjects#source("buf")
+    au!
+    autocmd BufNewFile,BufRead .vimjectrc* setlocal ft=vim
+    autocmd VimEnter * call vimjects#source()
+    autocmd BufReadPre * call vimjects#source()
 augroup end
 
+let s:continueSourcing = 1
+let s:globalsource = 1
 let s:knownfiles = {}
-let s:vimjects_continueSourcing = 1
 
-let g:vimjects_secure = 1 "If vimjects should run in sanity-checking mode.
-let g:vimjects_source_function = 'vimjects#sourceRecursive' "Function used to source vimjects files. May be customized by user.
+let g:Vimjects_secure = 1 "If vimjects should run in sanity-checking mode.
+let g:Vimjects_source_function = 'vimjects#sourceRecursive' "Function used to source vimjects files. May be customized by user.
 
-function! vimjects#source(prefix)
+function! vimjects#source(...)
+    let s:vimjects_continueSourcing = 1
     if len(s:knownfiles) == 0
         call vimjects#loadKnownFiles()
     endif 
-    let funccall = "call "  . g:vimjects_source_function . '("' . a:prefix . '")'
+    let funccall = "let s:sourcefiles = "  . g:Vimjects_source_function . '(' . "a:000" . ')'
     execute funccall
+    for l:filename in s:sourcefiles
+            call vimjects#safeSourceFile(l:filename)
+        if !s:continueSourcing
+            break
+        endif
+    endfor
 endfunction
 
 function! vimjects#loadKnownFiles() 
@@ -37,34 +46,48 @@ endfunction
 
 "Takes the expanded path of a file. Checks against valid hashes, and asks user to confirm if it is not found
 "or if the file is modified.
-function! vimjects#isFileSafe(filename)
+function! vimjects#safeSourceFile(filename)
     let hash = len(join(readfile(a:filename)))
-    if has_key(s:knownfiles, hash) && s:knownfiles[a:filename] == hash
-        return 1
-    elseif has_key(s:knownfiles, hash) && confirm("File " . a:filename . "has changed since last sourced. Continue sourcing?", "&Yes\n&no", 2) == 1
-        call vimjects#addKnownFiles(a:filename, hash)
-        return 1
-    elseif confirm("Source unknown file" . a:filename . "?", "&Yes\n&no", 2) == 1
-        call vimjects#addKnownFiles(a:filename, hash)
-        return 1
+    if has_key(s:knownfiles, a:filename) 
+        if s:knownfiles[a:filename] != hash && 
+        \  confirm("File " . a:filename . " has changed since last sourced. Continue sourcing?", "&Yes\n&no", 2) == 2
+            return 0
+        endif
+    else   
+        if confirm("Source unknown file " . a:filename . " ?", "&Yes\n&no", 2) == 2
+            return 0
+        endif
     endif
-    return 0
+    call vimjects#addKnownFiles(a:filename, hash)
+    let s:vimjects_continueSourcing = 0
+    execute "source " . a:filename
+    return 1
 endfunction
 
 function! vimjects#continueSourcing()
-    let s:vimjects_continueSourcing = 1
+    let s:continueSourcing = 1
 endfunction
 
-function! vimjects#sourceRecursive(prefix)
-    let s:vimjects_continueSourcing = 1
+function! vimjects#reglobalsouce()
+    let s:globalsource = 1
+endfunction
+
+function! vimjects#sourceRecursive(...)
+    let sourcefiles = []
+    if s:globalsource
+        let prefix = ""
+        let s:globalsource = 0
+    else
+        let prefix = "buf"
+    endif
     let curdir = fnamemodify(getcwd(), ":p:h")
-    let vimjectrcname = "/.vimject" . a:prefix . "rc"
+    let vimjectrcname = "/.vimject" . "rc" . l:prefix
     while curdir !=? "/" && s:vimjects_continueSourcing
         let nextFile = curdir . vimjectrcname
-        if filereadable(nextFile) && (!g:vimjects_secure || vimjects#isFileSafe(nextFile))
-            let s:vimjects_continueSourcing = 0
-            execute "source " . l:nextFile
+        if filereadable(nextFile) 
+            call add(sourcefiles, nextFile)
         endif 
         let curdir = fnamemodify(curdir, ":p:h:h")
     endwhile
+    return sourcefiles
 endfunction
