@@ -1,14 +1,49 @@
 *vimjects.txt*  Project specific vim configurations
 
-Types of files
+Author: Armand Halbert <http://ahalbert.com/>
+License: Same terms as Vim itself (see |license|)
 
-.vimjectsrc  - Opened with 
+This plugin is only available if 'compatible' is not set.
 
-.vimjectsbufrc - You can source buffer-specific se
+INTRODUCTION                                    *vimjects*
 
-.vimjectswinrc - Opened with each
+Add a .vimjectrc file with the extra configuraiton options in the directoty of your project.
 
-Variables
+Vimjects will confirm you want to source this file before doing so.
 
-g:vimjects_secure_mode
+By default, Vimjects will stop after sourcing 1 file. 
+Calling vimjects#continueSourcing() in your .vimjectsrc when sourcing will tell
+Vimjects to source the next file.
+
+FILES                                           *vimjects-filetypes*
+
+.vimjectsrc  - Opened when vim is launched
+
+.vimjectsbufrc - Opened with each  buffer-specific se
+
+OPTIONS                                          *vimjects-options*
+
+                                                 *g:Vimjects_sourceall*
+g:Vimjects_sourceall
+
+If set to 1, source all files given by the function without using vimjects#continueSourcing. 
+If 0, require vimjects#continueSourcing() to source next file.
+
+Values: 1 or 0
+Default: 0
+                                                 *g:Vimjects_secure*
+g:Vimjects_secure
+
+If set to 1, ask for confirmation is file has been changed. If set to 0, file is sourced without the prompt.
+
+Values: 1 or 0
+Default: 1
+
+                                                  *g:Vimjects_source_function*
+g:Vimjects_source_function
+
+Function to be used to determine what files to source. Takes any number of args, and returns a list of files to source.
+
+Values: Function signature or ""
+Default: `vimjects#sourceRecursive`
 

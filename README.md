@@ -32,7 +32,7 @@ the next file.
 #### `g:Vimjects_sourceall`
 Values: `1` or `0`
 
-If set to `1`, source all files given by the function without using vimjects#continueSourcing. If `0`, `vimjects#continueSourcing()`  require to source next file.
+If set to `1`, source all files given by the function without using vimjects#continueSourcing. If `0`, require `vimjects#continueSourcing()`  to source next file.
 
 Default: `0`
 
