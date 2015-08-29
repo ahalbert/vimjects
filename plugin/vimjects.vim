@@ -11,8 +11,12 @@ let s:knownfiles = {}
 
 let g:Vimjects_secure = 1 "If vimjects should run in sanity-checking mode.
 let g:Vimjects_source_function = 'vimjects#sourceRecursive' "Function used to source vimjects files. May be customized by user.
+let g:Vimjects_sourceall = 0 "Is vimjects#continueSourcing needed?
 
 function! vimjects#source(...)
+    if g:Vimjects_source_function ==? ""
+        return
+    endif
     let s:vimjects_continueSourcing = 1
     if len(s:knownfiles) == 0
         call vimjects#loadKnownFiles()
@@ -20,8 +24,13 @@ function! vimjects#source(...)
     let funccall = "let s:sourcefiles = "  . g:Vimjects_source_function . '(' . "a:000" . ')'
     execute funccall
     for l:filename in s:sourcefiles
-            call vimjects#safeSourceFile(l:filename)
-        if !s:continueSourcing
+            if !g:Vimjects_secure
+                call vimjects#safeSourceFile(l:filename)
+            else
+                let s:vimjects_continueSourcing = 0
+                execute "source " . a:filename
+            endif
+        if !g:Vimjects_sourceall && !s:continueSourcing 
             break
         endif
     endfor
@@ -82,7 +91,7 @@ function! vimjects#sourceRecursive(...)
     endif
     let curdir = fnamemodify(getcwd(), ":p:h")
     let vimjectrcname = "/.vimject" . "rc" . l:prefix
-    while curdir !=? "/" && s:vimjects_continueSourcing
+    while curdir !=? "/" 
         let nextFile = curdir . vimjectrcname
         if filereadable(nextFile) 
             call add(sourcefiles, nextFile)
