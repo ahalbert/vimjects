@@ -24,11 +24,11 @@ function! vimjects#source(...)
     let funccall = "let s:sourcefiles = "  . g:Vimjects_source_function . '(' . "a:000" . ')'
     execute funccall
     for l:filename in s:sourcefiles
-            if !g:Vimjects_secure
+            if g:Vimjects_secure
                 call vimjects#safeSourceFile(l:filename)
             else
                 let s:vimjects_continueSourcing = 0
-                execute "source " . a:filename
+                execute "source " . filename
             endif
         if !g:Vimjects_sourceall && !s:continueSourcing 
             break
