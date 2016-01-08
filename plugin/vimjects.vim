@@ -37,8 +37,8 @@ function! vimjects#source(...)
 endfunction
 
 function! vimjects#loadKnownFiles() 
-    if filereadable(expand('<sfile>:p:h') . "/hashes")
-        let text = readfile(expand('<sfile>:p:h') . "/hashes")
+    if filereadable(expand('<sfile>:p:h') . "/.vimjecthashes")
+        let text = readfile(expand('<sfile>:p:h') . "/.vimjecthashes")
         let s:knownfiles = eval("{".join(text)."}")
     endif
 endfunction
@@ -50,7 +50,7 @@ function! vimjects#addKnownFiles(filename, hash)
     for item in items(s:knownfiles)
         let liKnownFiles = liKnownFiles + [string(item[0]) . ":" . string(item[1]) . ","]
     endfor 
-    call writefile(liKnownFiles, expand('<sfile>:p:h') . "/hashes")
+    call writefile(liKnownFiles, expand('<sfile>:p:h') . "/.vimjecthashes")
 endfunction
 
 "Takes the expanded path of a file. Checks against valid hashes, and asks user to confirm if it is not found

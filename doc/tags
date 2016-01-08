@@ -1,1 +1,7 @@
+g:Vimjects_secure	vimjects.txt	/*g:Vimjects_secure*
+g:Vimjects_source_function	vimjects.txt	/*g:Vimjects_source_function*
+g:Vimjects_sourceall	vimjects.txt	/*g:Vimjects_sourceall*
+vimjects	vimjects.txt	/*vimjects*
+vimjects-filetypes	vimjects.txt	/*vimjects-filetypes*
+vimjects-options	vimjects.txt	/*vimjects-options*
 vimjects.txt	vimjects.txt	/*vimjects.txt*
