@@ -8,6 +8,8 @@ augroup end
 let s:continueSourcing = 1
 let s:globalsource = 1
 let s:knownfiles = {}
+let s:plugin_path = expand('<sfile>:p:h:h')
+let s:hashfile = s:plugin_path . "/vimjecthashes"
 
 let g:Vimjects_secure = 1 "If vimjects should run in sanity-checking mode.
 let g:Vimjects_source_function = 'vimjects#sourceRecursive' "Function used to source vimjects files. May be customized by user.
@@ -37,8 +39,8 @@ function! vimjects#source(...)
 endfunction
 
 function! vimjects#loadKnownFiles() 
-    if filereadable(expand('<sfile>:p:h') . "/.vimjecthashes")
-        let text = readfile(expand('<sfile>:p:h') . "/.vimjecthashes")
+    if filereadable(s:hashfile)
+        let text = readfile(s:hashfile)
         let s:knownfiles = eval("{".join(text)."}")
     endif
 endfunction
@@ -50,7 +52,7 @@ function! vimjects#addKnownFiles(filename, hash)
     for item in items(s:knownfiles)
         let liKnownFiles = liKnownFiles + [string(item[0]) . ":" . string(item[1]) . ","]
     endfor 
-    call writefile(liKnownFiles, expand('<sfile>:p:h') . "/.vimjecthashes")
+    call writefile(liKnownFiles, s:hashfile)
 endfunction
 
 "Takes the expanded path of a file. Checks against valid hashes, and asks user to confirm if it is not found
