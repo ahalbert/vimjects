@@ -1,15 +1,15 @@
-#Vimjects
+# Vimjects
 
 Project specific vim configurations for hackers. Checks your project's directory for `.vimjectsrc` files and sources them.
 
 For example, you can add autocommands that automatically runs your project's build command on save, specific to each project.
 
-###Features: 
+### Features: 
 * Recursively searches the filesystem for .vimjectrc and .vimjectrcbuf files and sources them
 * Rudimentary security features
 * Completely customizable to your needs
 
-##Installation
+## Installation
 
 Vimjects is compatible with Pathogen and other Vim addon managers. I personally use [vim-plug](https://github.com/junegunn/vim-plug)
 
@@ -19,7 +19,7 @@ Just add
 
 between the Plug calls in your .vimrc.
 
-##Using Vimjects
+## Using Vimjects
 Add a .vimjectrc file with the extra configuration options in the directory of your project.
 
 Vimjects will confirm you want to source this file before doing so.
@@ -27,7 +27,7 @@ Vimjects will confirm you want to source this file before doing so.
 By default, Vimjects will stop after sourcing 1 file. Calling `vimjects#continueSourcing()` in your .vimjectsrc when sourcing will tell Vimjects to source
 the next file.
 
-##Configuration options
+## Configuration options
 
 #### `g:Vimjects_sourceall`
 Values: `1` or `0`
